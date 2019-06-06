@@ -1,17 +1,52 @@
 //app.js
+import { wxLogin, checkToken, refreshToken} from '/utils/api.js';
+import * as store from 'utils/store.js';
 App({
   onLaunch: function() {
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    wx.qy.checkSession({
+      success: function () {
+        console.log('success')
+        checkToken().then(res=>{
+          if(res.data.code ==0&res.data.data == false){
+            refreshToken().then(res=>{
+              console.log(res,'refresh')
+            })
+          }
+          console.log(res,'===========')
+        })
+        //session_key 未过期，并且在本生命周期一直有效
+      },
+      fail: function () {
+        console.log('fail----')
+        // session_key 已经失效，需要重新执行登录流程
+        wx.qy.login({
+          success: res => {
+            // 发送 res.code 到后台换取 openId, sessionKey, unionId
+            console.log({
+              code: res.code,
+              brand: "CAR",
+              agentId: "1000007",
+              type: "binding"
 
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
+            }, '===============')
+            wxLogin({
+              code: res.code,
+              brand: "CAR",
+              agentId: "1000007",
+              type: "binding"
+
+            }).then(res => {
+              store.set('token', res.token)
+
+            })
+          }
+        })
+    
+  }
+})
+
+    
+   
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -35,10 +70,43 @@ App({
     // 获取系统状态栏信息
     wx.getSystemInfo({
       success: e => {
+        console.log(e,'-----------------')
+       
         this.globalData.StatusBar = e.statusBarHeight;
         let custom = wx.getMenuButtonBoundingClientRect();
+        console.log(custom,'=============')
         this.globalData.Custom = custom;
-        this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+        if (e.environment == "wxwork") {
+          this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight+45;
+        }else{
+          this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+        }
+      
+      }
+    })
+  },
+  login(){
+    // 登录
+    wx.qy.login({
+      success: res => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log({
+          code: res.code,
+          brand: "CAR",
+          agentId: "1000007",
+          type: "binding"
+
+        }, '===============')
+        wxLogin({
+          code: res.code,
+          brand: "CAR",
+          agentId: "1000007",
+          type: "binding"
+
+        }).then(res => {
+          // store.set(token,res.code)
+          console.log(res, '====================')
+        })
       }
     })
   },

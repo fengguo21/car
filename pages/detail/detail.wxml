@@ -6,13 +6,13 @@
 
 
   <view class="cu-item solid-bottom">
-    <view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+    <view class="cu-avatar radius lg" style="background-image:url({{user.avatar}});"></view>
     <view class="content">
       <view class="text-pink">
-        <text class="text-cut">莫甘娜</text>
+        <text class="text-cut">{{user.name}}</text>
       </view>
       <view class="text-gray text-sm flex">
-        <text class="text-cut">2019年12月4日</text>
+        <text class="text-cut">{{user.bindDate}}</text>
       </view>
     </view>
     <view class="action">
@@ -31,7 +31,7 @@
         <text class="text-grey">顾客CBD编号</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">345678</text>
+        <text class="text-grey text-sm">{{cdbInfo.cdbNumber}}</text>
       </view>
     </view>
     <view class="cu-item {{menuArrow?'arrow':''}}">
@@ -40,7 +40,7 @@
         <text class="text-grey">顾客姓名</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">张女士</text>
+        <text class="text-grey text-sm">{{cdbInfo.fullName}}</text>
       </view>
     </view>
 
@@ -50,7 +50,7 @@
         <text class="text-grey">顾客姓名(英语/拼音)</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">ZHANG NVSHI</text>
+        <text class="text-grey text-sm">{{cdbInfo.firstNameEn}} {{cdbInfo.lastNameEn}}</text>
       </view>
     </view>
 
@@ -60,7 +60,7 @@
         <text class="text-grey">联系电话</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">123456788</text>
+        <text class="text-grey text-sm">{{cdbInfo.mobileNumber}}</text>
       </view>
     </view>
 
@@ -70,7 +70,7 @@
         <text class="text-grey">电子邮件</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">1384980@163.com</text>
+        <text class="text-grey text-sm">{{cdbInfo.email}}</text>
       </view>
     </view>
 
@@ -80,7 +80,7 @@
         <text class="text-grey">地址</text>
       </view>
       <view class="action">
-        <text class="text-grey text-sm">静安区</text>
+        <text class="text-grey text-sm">{{cdbInfo.billingAddress}}</text>
       </view>
     </view>
     <view class="padding flex flex-direction">
@@ -100,7 +100,7 @@
     </view>
     <view class="cu-form-group margin-left margin-right">
 
-      <input placeholder="CDB编号"></input>
+      <input placeholder="CDB编号" type="number" bindinput="inputCdb"></input>
 
     </view>
 
@@ -112,4 +112,27 @@
 
   </view>
 
+</view>
+
+<view class='cu-load load-modal' wx:if="{{loadModal}}">
+  <view class='cuIcon-emojifill text-orange'></view>
+  <!-- <image src='/images/logo.png' class='png' mode='aspectFit'></image> -->
+  <view class='gray-text'>加载中...</view>
+</view>
+
+<view class="cu-modal  {{modalName=='Modal'?'show':''}}">
+
+<view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">提示</view>
+      <view class="action" bindtap="hideModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      未匹配成功
+    </view>
+   
+  </view>
+  
 </view>
